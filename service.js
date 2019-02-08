@@ -21,7 +21,7 @@ class NodeSet {
         this.payload = payload;
         this.copy = [];
         this.left = 1;
-        this.right = 2;
+        this.right = 0;
     }
 
     traverse(){
@@ -30,11 +30,8 @@ class NodeSet {
 
         let node = new Node();
         node.left = this.left;
-        node.right = this.right;
         node.value = name;
-
-        this.copy.push(node);
-        this.incrementLeftAndRight();
+        this.incrementLeft();
 
         if(this.payload.daughters){
 
@@ -43,19 +40,35 @@ class NodeSet {
                 let name = daughter.org_name;
                 let node = new Node();
                 node.left = this.left;
-                node.right = this.right;
                 node.value = name;
-
-                this.copy.push(node);
-                this.incrementLeftAndRight();
+                this.incrementLeft();
 
                 if(daughter.daughters){
                     this.traverseDaughter(daughter.daughters);
+                }else{
+                    this.right = node.left + 1;
+                    this.left = this.right + 1;
                 }
+
+                node.right = this.right;
+                this.copy.push(node);
+                this.incrementLeft();
             }
+
+            this.right++;
+
+        }else{
+
+            this.right = this.left + 1;
         }
 
-        return this.copy;
+        node.right = this.right;
+        this.copy.push(node);
+
+        
+        
+
+        return this.copy.reverse();
     }
 
     traverseDaughter(daughters){
@@ -64,24 +77,28 @@ class NodeSet {
             let name = daughter.org_name;
             let node = new Node();
             node.left = this.left;
-            node.right = this.right;
             node.value = name;
 
-            this.copy.push(node);
-            this.incrementLeftAndRight();
+            this.incrementLeft();
 
             if(daughter.daughters){
                 this.traverseDaughter(daughter.daughters);
+            }else{
+                //if leaf node, increment right and next left must be greater than current right
+                this.right = node.left + 1;
+                this.left = this.right + 1;
             }
+
+            node.right = this.right ;
+            this.copy.push(node);
         }
 
-        
+        this.right++;
     }
 
-    incrementLeftAndRight(){
+    incrementLeft(){
 
-        this.left = this.left + 2;
-        this.right = this.right + 2;
+        this.left = this.left + 1;
     }
 }
 
