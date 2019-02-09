@@ -1,7 +1,9 @@
 module.exports = function(payload){
 
-    let nodeSet = new NodeSet(payload);
-    return nodeSet.traverse();
+    let nodeSet = new NodeSet();
+    nodeSet.tranverse(payload);
+
+    return nodeSet.copy.reverse();
 
 }
 
@@ -16,89 +18,39 @@ class Node {
 
 class NodeSet {
 
-    constructor(payload){
-
-        this.payload = payload;
+    constructor(){
         this.copy = [];
-        this.left = 1;
+        this.left = 0;
         this.right = 0;
     }
 
-    traverse(){
+    tranverse(payload){
 
-        let name = this.payload.org_name;
-
+        this.left++;
+        
         let node = new Node();
         node.left = this.left;
-        node.value = name;
-        this.incrementLeft();
+        node.value = payload.org_name;
+        
+        if(payload.daughters){
 
-        if(this.payload.daughters){
-
-            for(let daughter of this.payload.daughters){
-
-                let name = daughter.org_name;
-                let node = new Node();
-                node.left = this.left;
-                node.value = name;
-                this.incrementLeft();
-
-                if(daughter.daughters){
-                    this.traverseDaughter(daughter.daughters);
-                }else{
-                    this.right = node.left + 1;
-                    this.left = this.right + 1;
-                }
-
-                node.right = this.right;
-                this.copy.push(node);
-                this.incrementLeft();
+            let daughters = payload.daughters;
+            for(let daughter of daughters){
+                this.tranverse(daughter);
             }
 
-            this.right++;
-
-        }else{
-
+            //finished traversing the childdren of this node, so set the right value
             this.right = this.left + 1;
+            this.left++;
+        }else{
+            //This is the leaf node, so the right should be left + 1
+            this.left++;
+            this.right = node.left + 1
         }
 
         node.right = this.right;
         this.copy.push(node);
-
-        
-        
-
-        return this.copy.reverse();
     }
 
-    traverseDaughter(daughters){
-
-        for(let daughter of daughters){
-            let name = daughter.org_name;
-            let node = new Node();
-            node.left = this.left;
-            node.value = name;
-
-            this.incrementLeft();
-
-            if(daughter.daughters){
-                this.traverseDaughter(daughter.daughters);
-            }else{
-                //if leaf node, increment right and next left must be greater than current right
-                this.right = node.left + 1;
-                this.left = this.right + 1;
-            }
-
-            node.right = this.right ;
-            this.copy.push(node);
-        }
-
-        this.right++;
-    }
-
-    incrementLeft(){
-
-        this.left = this.left + 1;
-    }
 }
 
