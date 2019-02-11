@@ -16,7 +16,8 @@ POST request
 docker-compose up -d
 ```
 ## API DOC
-* http://localhost:3000?name=org_name&page=1&pageSize=100
+* GET http://localhost:3000?name=org_name&page=1&pageSize=100
+* POST http://localhost:3000
 
 ## Author
 Ositadinma Tochukwu Godson
