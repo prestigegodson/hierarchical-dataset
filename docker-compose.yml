@@ -1,0 +1,19 @@
+version: '3'
+services: 
+  db:
+    image: postgres:10.6-alpine
+    environment: 
+      POSTGRES_PASSWORD: pipedrive
+      POSTGRES_USER: pipedrive
+      POSTGRES_DB: pipedrive
+    ports: 
+      - 5431:5432
+  web:
+    build: .
+    command: node .
+    ports:
+      - '3000:3000'
+    volumes: 
+      - .:/usr/app/
+    depends_on:
+      - db

@@ -3,7 +3,7 @@ const { Pool } = require('pg')
 const pool = new Pool(
     {
         user: 'pipedrive',
-        host: 'localhost',
+        host: 'db',
         database: 'pipedrive',
         password: 'pipedrive',
         port: 5432,

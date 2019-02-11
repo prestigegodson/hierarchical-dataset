@@ -6,23 +6,17 @@ POST request
 * REST API endpoint that returns relations of one organization (queried by name)
 
 ## Requirement
-* PostgreSQL database server
-* Install [nodejs](https://nodejs.org/en/)
-
-## Setting up database
-```sql
-CREATE DATABASE pipdrive
-CREATE ROLE pipdrive LOGIN
-ALTER ROLE pipdrive WITH PASSWORD pipdrive
-GRANT ALL PRIVILEGES ON DATABASE pipdrive to pipdrive;
-```
+* docker compose
 
 ## Running Application
 
 * Navigate to project root `cd root-directory-path`
-* Run the index.js via terminal
+* Run docker compose
 ```bash
-node .
+docker-compose up -d
 ```
+## API DOC
+* http://localhost:3000?name=org_name&page=1&pageSize=100
+
 ## Author
 Ositadinma Tochukwu Godson
